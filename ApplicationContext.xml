@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--aop通知-->
+
+    <bean id="myAdvice" class="com.chaoxu.aop.MyAdvice"/>
+
+
+
+    <aop:config>
+        <!--应用通知类对象-->
+        <aop:aspect ref="myAdvice">
+
+            <!--定义切入点表达式-->
+            <aop:pointcut id="myPointCut" expression="execution(* com.chaoxu.dao..*.*(..))"/>
+
+            <aop:around method="aroungAdvice" pointcut-ref="myPointCut"/>
+
+            <!--&lt;!&ndash;前置通知&ndash;&gt;
+            <aop:before method="BeforeAdvice" pointcut-ref="myPointCut"/>
+
+            &lt;!&ndash;后置通知&ndash;&gt;
+            <aop:after-returning method="LastAdvidce" pointcut-ref="myPointCut" returning="result"/>
+
+            &lt;!&ndash;异常通知&ndash;&gt;
+            <aop:after-throwing method="ExceptionAdvice" pointcut-ref="myPointCut" throwing="e"/>
+
+            &lt;!&ndash;最终通知&ndash;&gt;
+            <aop:after-returning method="finallyAdvice" pointcut-ref="myPointCut" />
+-->
+        </aop:aspect>
+    </aop:config>
+    <bean id="userDao2" class="com.chaoxu.dao.UserDaoImpl2" lazy-init="true" scope="prototype"/>
+
+    <bean id="serviceUser" class="com.chaoxu.service.ServiceUser">
+        <property name="userDaoX" ref="userDao2"/>
+    </bean>
+    <!--
+        自动注入
+        1.byName : 根据setXXX()方法的xxx部分的名字从Spring容器中获取对象，并自动注入到当前类中
+        2.byType : 根据set方法参数的类型从Spring容器中查找符合的对象，并自动注入到当前类中。如果Spring
+        容器中有一个以上的Bean符合类型，则抛出异常
+        3.contructor 先根据构造方法的参数的名字从Spring容器中查找对象，如果没有找到在根据构造方法
+        参数的类型从Spring容器中查找对象。
+    -->
+    <!--自助查询-->
+
+    <!--<bean id="serviceUser" class="com.chaoxu.service.ServiceUser" autowire="constructor"/>-->
+    <!--<bean id="serviceUser" class="com.chaoxu.service.ServiceUser" autowire="byType"/>-->
+    <!--<bean id="serviceUser" class="com.chaoxu.service.ServiceUser" autowire="byName"/>-->
+
+    <!--构造方法查询-->
+
+
+    <!--根据类型查询-->
+    <!-- <bean id="serviceUser" class="com.chaoxu.service.ServiceUser">
+ 
+         <constructor-arg type="com.chaoxu.dao.UserDao" ref="userDao2"/>
+         <constructor-arg type="com.chaoxu.dao.UserDao" ref="userDao1"/>
+ 
+     </bean>-->
+
+
+    <!--根据下标查询-->
+    <!--<bean id="serviceUser" class="com.chaoxu.service.ServiceUser">
+
+        <constructor-arg index="1" value="赵朝旭"/>
+        <constructor-arg index="0" ref="userDao2"/>
+
+    </bean>-->
+
+    <!--按照名字查找-->
+
+    <!--<bean id="serviceUser" class="com.chaoxu.service.ServiceUser">
+        <constructor-arg name="userDao" ref="userDao1"/>
+        <constructor-arg name="userDao1" ref="userDao2"/>
+    </bean>-->
+
+
+    <!-- <bean id="ServiceUserDao" class="com.chaoxu.service.ServiceUserDao">
+        <property name="userDao" ref="userDao1"/>
+    </bean>-->
+
+    <!--<bean id="userDao" class="com.chaoxu.dao.UserDaoImpl"/>
+-->
+
+
+    <!--<bean id="serviceUser" class="com.chaoxu.service.ServiceUser">
+        <property name="init" value="666"/>
+        <property name="str" value="革命仍在继续！！"/>
+        <property name="lists">
+            <list>
+                <value>list1</value>
+                <value>list2</value>
+                <value>list3</value>
+            </list>
+        </property>
+        <property name="sets">
+            <set>
+                <value>set1</value>
+                <value>set2</value>
+                <value>set3</value>
+            </set>
+        </property>
+        <property name="map">
+            <map>
+                <entry key="k1" value="map1"/>
+                <entry key="k2" value="map2"/>
+                <entry key="k3" value="map"/>
+            </map>
+        </property>
+    </bean>-->
+
+</beans>
